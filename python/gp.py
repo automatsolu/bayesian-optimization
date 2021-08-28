@@ -75,9 +75,9 @@ def sample_next_hyperparameter(acquisition_func, gaussian_process, evaluated_los
     """
     best_x = None
     best_acquisition_value = 1
-    n_params = bounds.shape[0]
+    n_params = bounds[0]
 
-    for starting_point in np.random.uniform(bounds[:, 0], bounds[:, 1], size=(n_restarts, n_params)):
+    for starting_point in np.random.uniform(bounds[0], bounds[1], size=(n_restarts, n_params)):
 
         res = minimize(fun=acquisition_func,
                        x0=starting_point.reshape(1, -1),
