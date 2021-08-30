@@ -1,5 +1,4 @@
 """ gp.py
-
 Bayesian optimisation of loss functions.
 """
 
@@ -11,9 +10,7 @@ from scipy.optimize import minimize
 
 def expected_improvement(x, gaussian_process, evaluated_loss, greater_is_better=False, n_params=1):
     """ expected_improvement
-
     Expected improvement acquisition function.
-
     Arguments:
     ----------
         x: array-like, shape = [n_samples, n_hyperparams]
@@ -27,7 +24,6 @@ def expected_improvement(x, gaussian_process, evaluated_loss, greater_is_better=
             Boolean flag that indicates whether the loss function is to be maximised or minimised.
         n_params: int.
             Dimension of the hyperparameter space.
-
     """
 
     x_to_predict = x.reshape(-1, n_params)
@@ -53,9 +49,7 @@ def expected_improvement(x, gaussian_process, evaluated_loss, greater_is_better=
 def sample_next_hyperparameter(acquisition_func, gaussian_process, evaluated_loss, greater_is_better=False,
                                bounds=(0, 10), n_restarts=25):
     """ sample_next_hyperparameter
-
     Proposes the next hyperparameter to sample the loss function for.
-
     Arguments:
     ----------
         acquisition_func: function.
@@ -71,13 +65,12 @@ def sample_next_hyperparameter(acquisition_func, gaussian_process, evaluated_los
             Bounds for the L-BFGS optimiser.
         n_restarts: integer.
             Number of times to run the minimiser with different starting points.
-
     """
     best_x = None
     best_acquisition_value = 1
-    n_params = bounds[0]
+    n_params = bounds.shape[0]
 
-    for starting_point in np.random.uniform(bounds[0], bounds[1], size=(n_restarts, n_params)):
+    for starting_point in np.random.uniform(bounds[:, 0], bounds[:, 1], size=(n_restarts, n_params)):
 
         res = minimize(fun=acquisition_func,
                        x0=starting_point.reshape(1, -1),
@@ -95,9 +88,7 @@ def sample_next_hyperparameter(acquisition_func, gaussian_process, evaluated_los
 def bayesian_optimisation(n_iters, sample_loss, bounds, x0=None, n_pre_samples=5,
                           gp_params=None, random_search=False, alpha=1e-5, epsilon=1e-7):
     """ bayesian_optimisation
-
     Uses Gaussian Processes to optimise the loss function `sample_loss`.
-
     Arguments:
     ----------
         n_iters: integer.
